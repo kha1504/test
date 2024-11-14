@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự đoán điểm trung bình</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        label, input, button {
+            font-size: 1.1em;
+            margin: 0 5px;
+            padding: 8px;
+        }
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dự đoán điểm trung bình cho các môn học</h1>
+
+    <form method="POST">
+        <label for="year">Nhập năm muốn dự đoán:</label>
+        <input type="number" name="year" id="year" min="2000" max="2100" required>
+        <button type="submit">Dự đoán</button>
+    </form>
+
+    <h2>Điểm trung bình qua các năm</h2>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Năm</th>
+                {% for subject in avg_scores_by_year.columns %}
+                <th>{{ subject }}</th>
+                {% endfor %}
+            </tr>
+            {% for year, scores in avg_scores_by_year.iterrows() %}
+            <tr>
+                <td>{{ year }}</td>
+                {% for score in scores %}
+                <td>{{ score }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            
+            <!-- Chênh lệch giữa năm cuối và năm dự đoán -->
+            {% if score_differences %}
+            <tr>
+                <td>Chênh lệch ({{ prev_year }}-{{ latest_year }})</td>
+                {% for diff in score_differences %}
+                <td>{{ diff }}</td>
+                {% endfor %}
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+
+    <h2>Biểu đồ dự đoán điểm trung bình</h2>
+    <div class="chart-container">
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Biểu đồ dự đoán điểm trung bình">
+    </div>
+</body>
+</html>
