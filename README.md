@@ -1,5 +1,5 @@
 
-# 💫About Me :
+# 💫Về Đồ Án:
 Giới thiệu
 Dự án này xây dựng một hệ thống 
 hỗ trợ dự đoán điểm thi Trung học
